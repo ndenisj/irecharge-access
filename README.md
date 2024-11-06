@@ -25,7 +25,7 @@ This is an event-driven backend service for electricity bill vending and payment
 1. Clone the repository:
 
 ```bash
-git clone
+git clone git@github.com:ndenisj/irecharge-access.git
 ```
 
 2. Install dependencies:
