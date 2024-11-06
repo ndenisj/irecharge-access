@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - ./config/env/development.env
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+
+  irecharge:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      target: development
+    command: npm run start:dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - ./config/env/development.env
+    depends_on:
+      - postgres
