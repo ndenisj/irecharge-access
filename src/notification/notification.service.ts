@@ -15,7 +15,7 @@ export class NotificationService {
   @OnEvent('bill.created')
   async handleBillCreated(event: BillCreatedEvent) {
     try {
-      this.logger.log(`Bill created with ID: ${event.billId} for amount: ${event.amount} FROM NotificationService`);
+      // this.logger.log(`Bill created with ID: ${event.billId} for amount: ${event.amount} FROM NotificationService`);
       await this.smsService.sendSms(
         '+1234567890',
         `New bill created with ID: ${event.billId} for amount: ${event.amount}`,
@@ -28,10 +28,10 @@ export class NotificationService {
   @OnEvent('payment.completed')
   async handlePaymentCompleted(event: PaymentCompletedEvent) {
     try {
-      this.logger.log(`Payment completed for bill: ${event.billId} FROM NotificationService`);
+      // this.logger.log(`Payment completed for bill: ${event.billId} FROM NotificationService`);
       await this.smsService.sendSms(
         '+1234567890',
-        `Payment completed for bill: ${event.billId}`,
+        `Payment completed. Token: ${event.token}`,
       );
     } catch (error) {
       this.logger.error(`Failed to send payment completion notification: ${error.message}`);
@@ -42,14 +42,15 @@ export class NotificationService {
   async handleWalletUpdated(event: WalletUpdatedEvent) {
     if (event.newBalance < this.LOW_BALANCE_THRESHOLD) {
       try {
-        this.logger.log(`Low balance alert! Your wallet balance is ${event.newBalance} FROM NotificationService`);
+        // this.logger.log(`Low balance alert! Your wallet balance is ${event.newBalance} FROM NotificationService`);
         await this.smsService.sendSms(
           '+1234567890',
-          `Low balance alert! Your wallet balance is ${event.newBalance}`,
+          `Low balance alert! Your wallet balance is`,
         );
       } catch (error) {
         this.logger.error(`Failed to send low balance notification: ${error.message}`);
       }
     }
   }
+
 }

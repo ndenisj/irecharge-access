@@ -7,6 +7,8 @@ import { WalletService } from 'src/wallet/wallet.service';
 import { BillCreatedEvent, PaymentCompletedEvent } from 'src/common/events/bill.events.dto';
 import { generateRef } from 'shared/utils/generator.util';
 import { DataSource } from 'typeorm';
+import { ElectricityService } from 'src/electricity/electricity.service';
+import { ProviderStatus } from 'src/electricity/interfaces/provider-response.interface';
 
 @Injectable()
 export class BillService {
@@ -16,7 +18,8 @@ export class BillService {
     constructor(
       private readonly billRepository: BillRepository,
       private eventEmitter: EventEmitter2,
-      private walletsService: WalletService,
+      private readonly walletsService: WalletService,
+      private readonly electricityService: ElectricityService,
       private dataSource: DataSource,
     ) {}
 
@@ -82,15 +85,25 @@ export class BillService {
         // Update bill status
         bill.status = BillStatus.PAID;
         const updatedBill = await this.billRepository.saveWithTransaction(bill, queryRunner);
+
+        // Send to service provider
+       const providerResponse =  await this.electricityService.processSubscription(
+          bill.meterId,
+          bill.amount,
+          bill.validationRef
+        );
   
         // Commit the transaction
         await queryRunner.commitTransaction();
   
-        // Emit events after successful transaction
-        this.eventEmitter.emit(
-          'payment.completed',
-          new PaymentCompletedEvent(bill.id.toString(), bill.amount, walletId)
-        );
+        // Emit events after successful transaction and provider returns 'Success'
+        if (providerResponse.status === ProviderStatus.SUCCESS) {
+          this.eventEmitter.emit(
+            'payment.completed',
+            new PaymentCompletedEvent(bill.id.toString(), bill.amount, walletId, providerResponse.token),
+          );
+        }
+        
   
         return updatedBill;
   

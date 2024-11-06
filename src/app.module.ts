@@ -8,6 +8,8 @@ import { BillModule } from './bill/bill.module';
 import { WalletModule } from './wallet/wallet.module';
 import { NotificationModule } from './notification/notification.module';
 import { SmsModule } from './sms/sms.module';
+import { AwsModule } from './aws/aws.module';
+import { ElectricityModule } from './electricity/electricity.module';
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ import { SmsModule } from './sms/sms.module';
       validationSchema,
     }),
     DatabaseModule,
-    EventEmitterModule.forRoot(), BillModule, WalletModule, NotificationModule, SmsModule,
+    EventEmitterModule.forRoot(), BillModule, WalletModule, NotificationModule, SmsModule, AwsModule, ElectricityModule,
   ],
 })
 export class AppModule {}

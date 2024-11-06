@@ -1,5 +1,5 @@
 
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BillStatus {
   PENDING = 'Pending',
