@@ -10,6 +10,7 @@ import { NotificationModule } from './notification/notification.module';
 import { SmsModule } from './sms/sms.module';
 import { AwsModule } from './aws/aws.module';
 import { ElectricityModule } from './electricity/electricity.module';
+// import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -23,4 +24,4 @@ import { ElectricityModule } from './electricity/electricity.module';
     EventEmitterModule.forRoot(), BillModule, WalletModule, NotificationModule, SmsModule, AwsModule, ElectricityModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
